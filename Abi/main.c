@@ -1,13 +1,7 @@
-/**************************
- * File:   main.c                                                           *
- * Author: Esteban Lemos                                                    *
- * Created on 5 de febrero de 2014, 20:49                                   *
- * En caso de necesitar el proyecto completo ingresar en                    *
- * https://github.com/EEST1/Plantilla_6to                                   *
- **************************/
 
 
-// PARPADEO DEL LED                        PLANTILLA TP //
+
+// PARPADEO DEL LED //
 #include <xc.h>
 #include "confbits.h"       //no se debe de modificar este archivo para
 //garantizar el funcionamiento del BOOTLOADER
@@ -16,7 +10,7 @@
 
 #include "ConfShield2_1.h" //cambiar para el teclado // esta viene x defecto
 //el teclado utiliza los mismos pines que el entrenador pero la
-//incializaci´on esta disponible en el Shield1.3 no en el 2.1.
+//incializaciÂ´on esta disponible en el Shield1.3 no en el 2.1.
 #include "ConfShield1_3.h"
 #include "lcd.h"
 #include "teclado.h"
@@ -60,26 +54,26 @@ void main(void) {
 
 void __interrupt myISR(void) {
     
-    //TIMMER 1 PARA SEGUNDOS
+    //TIMMER 0 PARA SEGUNDOS
     if (TMR0IF == 1) { //termino termino de contar el timer?
         TMR0IF = 0; //bajamos el flag
-        TMR0L = 0xD2; //el timer contará 47 fosc/4 * 256 = 12032 * 0,0833us
+        TMR0L = 0xD2; //el timer contarÃ¡ 47 fosc/4 * 256 = 12032 * 0,0833us
         TMR0H = 0x48; //en total aprox 1.0022ms  casi 1ms
           //    des =~ des;
  
-         if(activador_tiempo_ventana_peso==1){ //si el flag (activador) se activó, comienzo a decrementar el tiempo
+         if(activador_tiempo_ventana_peso==1){ //si el flag (activador) se activÃ³, comienzo a decrementar el tiempo
             if(tiempo_ventana_peso!=0){
                 tiempo_ventana_peso--;
             }
         }
         
-         if(activador_on == 1){                //si el flag (activador) se activó, comienzo a decrementar el tiempo
+         if(activador_on == 1){                //si el flag (activador) se activÃ³, comienzo a decrementar el tiempo
             if(tiempo_parpadeo_on != 0){
                 tiempo_parpadeo_on--;
             }
         }
         
-         if(activador_off==1){                 //si el flag (activador) se activó, comienzo a decrementar el tiempo
+         if(activador_off==1){                 //si el flag (activador) se activÃ³, comienzo a decrementar el tiempo
             if(tiempo_parpadeo_off !=0){
                 tiempo_parpadeo_off--;
             }
@@ -91,7 +85,7 @@ void __interrupt myISR(void) {
 
     if (TMR1IF == 1) { //TIMER 1 PARA ms
         TMR1IF = 0; //bajamos el flag
-        TMR1L = 0x1B; //el timer contará 1200 fosc/4 * 1 = 12032 * 0,0833us
+        TMR1L = 0x1B; //el timer contarÃ¡ 1200 fosc/4 * 1 = 12032 * 0,0833us
         TMR1H = 0xD1; //en total aprox 99.96us  casi 100us
         tic_teclado();
         tic_LCD();
@@ -107,14 +101,14 @@ void __interrupt myISR(void) {
 
 
 
-void parpadeoLed() {//declaro la función parpadeoLed
+void parpadeoLed() {//declaro la funciÃ³n parpadeoLed
 
-    if (tiempo_ventana_peso != 0) { // si el tiempo no llegó a 0
+    if (tiempo_ventana_peso != 0) { // si el tiempo no llegÃ³ a 0
         activador_tiempo_ventana_peso = 1; // activo el flag para que ahi comience el temporizador a decrementar
         switch (casos_parpadeo) { //switch respecto a casos parpadeo
             case 0://primer caso
             {
-                if (tiempo_parpadeo_on != 0) { // si el tiempo de encendido del LED1 no llegó a 0
+                if (tiempo_parpadeo_on != 0) { // si el tiempo de encendido del LED1 no llegÃ³ a 0
 
                     activador_on = 1; // activo el flag para qu recien ahi comience a contar el temporizador de ese led
                     LED1 = 1; // activo el led
@@ -122,7 +116,7 @@ void parpadeoLed() {//declaro la función parpadeoLed
                     msg2LCD("LED1 ENCENDIDO");
                     
                 }
-                if (tiempo_parpadeo_on == 0) { // si llegó a 0
+                if (tiempo_parpadeo_on == 0) { // si llegÃ³ a 0
                     activador_on = 0; // pongo el flag en 0 para que deje de contar
                     clear_LCD(); // limpio pantalla lcd
                     casos_parpadeo = 1; // paso al siguiente caso
@@ -149,7 +143,7 @@ void parpadeoLed() {//declaro la función parpadeoLed
                     msg2LCD("LED2 ENCENDIDO");
                   
                 }
-                if(tiempo_parpadeo_off==0){ // si el tiempo llegó a 0
+                if(tiempo_parpadeo_off==0){ // si el tiempo llegÃ³ a 0
                     activador_off=0; //apago el flag
                     casos_parpadeo=3; //paso al sig caso
                     clear_LCD(); // limpio pantalla
@@ -159,7 +153,7 @@ void parpadeoLed() {//declaro la función parpadeoLed
 
             case 3:
             {
-                if (tiempo_parpadeo_off == 0) { // si el tiempo llegó a 0
+                if (tiempo_parpadeo_off == 0) { // si el tiempo llegÃ³ a 0
                     LED2 = 0; // apago el led
                     clear_LCD(); //limpio pantalla
                     tiempo_parpadeo_off = 3; //cargo para la proxiima vez
@@ -169,7 +163,7 @@ void parpadeoLed() {//declaro la función parpadeoLed
             }
         }
     }
-    if(tiempo_ventana_peso==0){ // si el contador principal de 5 seg llegó a 0
+    if(tiempo_ventana_peso==0){ // si el contador principal de 5 seg llegÃ³ a 0
         activador_tiempo_ventana_peso=0; //entonces apago el flag para que no entre a la maquina de estados
         LED1=0; //apago los leds
         LED2=0;
