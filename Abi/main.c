@@ -1,4 +1,7 @@
-
+/**************************
+ * File:   main.c                                                           *
+ * Author: Abigail Miranda                                                    *
+ **************************/
 
 
 // PARPADEO DEL LED //
